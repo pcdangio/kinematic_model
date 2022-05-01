@@ -5,9 +5,7 @@ using namespace kinematic_model::geometry::attachment;
 // CONSTRUCTORS
 ftfr_t::ftfr_t()
     : attachment_t(attachment_t::type_t::FIXED)
-{
-
-}
+{}
 
 // FACTORY
 std::shared_ptr<ftfr_t> ftfr_t::create(double x, double y, double z, double qw, double qx, double qy, double qz)
@@ -17,7 +15,13 @@ std::shared_ptr<ftfr_t> ftfr_t::create(double x, double y, double z, double qw, 
     std::shared_ptr<ftfr_t> ftfr(new ftfr_t());
 
     // Set fixed transform.
-    ftfr->m_transform = transform::transform_t({x, y, z}, {qw, qx, qy, qz});
+    ftfr->m_transform.translation.x() = x;
+    ftfr->m_transform.translation.y() = y;
+    ftfr->m_transform.translation.z() = z;
+    ftfr->m_transform.rotation.w() = qw;
+    ftfr->m_transform.rotation.x() = qx;
+    ftfr->m_transform.rotation.y() = qy;
+    ftfr->m_transform.rotation.z() = qz;
 
     // Return instance.
     return ftfr;
@@ -25,9 +29,7 @@ std::shared_ptr<ftfr_t> ftfr_t::create(double x, double y, double z, double qw, 
 std::shared_ptr<ftfr_t> ftfr_t::create(double x, double y, double z, double roll, double pitch, double yaw)
 {
     // Convert euler rotation to quaternion.
-    Eigen::Quaterniond q = Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX()) *
-                           Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY()) *
-                           Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ());
+    Eigen::Quaterniond q = transform::transform_t::to_quaternion(Eigen::Vector3d(roll, pitch, yaw));
 
     // Use base factory method to create instance.
     return ftfr_t::create(x, y, z, q.w(), q.x(), q.y(), q.z());

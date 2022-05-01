@@ -38,12 +38,8 @@ private:
     ftdr_t(const ftdr_t&) = delete;
 
     // VARIABLES
-    /// \brief The fixed x component of the translation.
-    double_t m_x;
-    /// \brief The fixed y component of the translation.
-    double_t m_y;
-    /// \brief The fixed z component of the translation.
-    double_t m_z;
+    /// \brief The attachment's transform.
+    mutable transform::transform_t m_transform;
     /// \brief The state vector index of the dynamic w component of the quaternion.
     uint32_t m_state_index_qw;
     /// \brief The state vector index of the dynamic x component of the quaternion.

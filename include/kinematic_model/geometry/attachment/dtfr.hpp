@@ -47,20 +47,14 @@ private:
     dtfr_t(const dtfr_t&) = delete;
 
     // VARIABLES
+    /// \brief The attachment's transform.
+    mutable transform::transform_t m_transform;
     /// \brief The state vector index of the dynamic x component of the translation.
     uint32_t m_state_index_x;
     /// \brief The state vector index of the dynamic y component of the translation.
     uint32_t m_state_index_y;
     /// \brief The state vector index of the dynamic z component of the translation.
     uint32_t m_state_index_z;
-    /// \brief The fixed w component of the quaternion.
-    double_t m_qw;
-    /// \brief The fixed x component of the quaternion.
-    double_t m_qx;
-    /// \brief The fixed y component of the quaternion.
-    double_t m_qy;
-    /// \brief The fixed z component of the quaternion.
-    double_t m_qz;
 };
 
 }}}
