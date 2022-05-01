@@ -38,7 +38,7 @@ public:
     static std::shared_ptr<ftfr_t> create(double x, double y, double z, double roll, double pitch, double yaw);
 
     // METHODS
-    transform::transform_t get_transform(const Eigen::VectorXd& state_vector) const override;
+    const transform::transform_t& get_transform(const Eigen::VectorXd& state_vector) override;
 
 private:
     // CONSTRUCTORS

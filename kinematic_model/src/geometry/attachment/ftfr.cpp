@@ -36,7 +36,7 @@ std::shared_ptr<ftfr_t> ftfr_t::create(double x, double y, double z, double roll
 }
 
 // METHODS
-transform::transform_t ftfr_t::get_transform(const Eigen::VectorXd& state_vector) const
+const transform::transform_t& ftfr_t::get_transform(const Eigen::VectorXd& state_vector)
 {
     return ftfr_t::m_transform;
 }

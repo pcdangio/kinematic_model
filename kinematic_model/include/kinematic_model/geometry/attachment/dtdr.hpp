@@ -29,7 +29,7 @@ public:
     static std::shared_ptr<dtdr_t> create(uint32_t state_index_x, uint32_t state_index_y, uint32_t state_index_z, uint32_t state_index_qw, uint32_t state_index_qx, uint32_t state_index_qy, uint32_t state_index_qz);
 
     // METHODS
-    transform::transform_t get_transform(const Eigen::VectorXd& state_vector) const override;
+    const transform::transform_t& get_transform(const Eigen::VectorXd& state_vector) override;
 
 private:
     // CONSTRUCTORS

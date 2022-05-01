@@ -30,22 +30,19 @@ std::shared_ptr<dtdr_t> dtdr_t::create(uint32_t state_index_x, uint32_t state_in
 }
 
 // METHODS
-transform::transform_t dtdr_t::get_transform(const Eigen::VectorXd& state_vector) const
+const transform::transform_t& dtdr_t::get_transform(const Eigen::VectorXd& state_vector)
 {
-    // Create output transform.
-    transform::transform_t transform;
-
     // Set translation.
-    transform.translation.x() = state_vector[dtdr_t::m_state_index_x];
-    transform.translation.y() = state_vector[dtdr_t::m_state_index_y];
-    transform.translation.z() = state_vector[dtdr_t::m_state_index_z];
+    dtdr_t::m_transform.translation.x() = state_vector[dtdr_t::m_state_index_x];
+    dtdr_t::m_transform.translation.y() = state_vector[dtdr_t::m_state_index_y];
+    dtdr_t::m_transform.translation.z() = state_vector[dtdr_t::m_state_index_z];
 
     // Set rotation.
-    transform.rotation.w() = state_vector[dtdr_t::m_state_index_qw];
-    transform.rotation.x() = state_vector[dtdr_t::m_state_index_qx];
-    transform.rotation.y() = state_vector[dtdr_t::m_state_index_qy];
-    transform.rotation.z() = state_vector[dtdr_t::m_state_index_qz];
+    dtdr_t::m_transform.rotation.w() = state_vector[dtdr_t::m_state_index_qw];
+    dtdr_t::m_transform.rotation.x() = state_vector[dtdr_t::m_state_index_qx];
+    dtdr_t::m_transform.rotation.y() = state_vector[dtdr_t::m_state_index_qy];
+    dtdr_t::m_transform.rotation.z() = state_vector[dtdr_t::m_state_index_qz];
 
     // Return transform.
-    return transform;
+    return dtdr_t::m_transform;
 }

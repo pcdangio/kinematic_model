@@ -29,7 +29,7 @@ public:
     static std::shared_ptr<ftdr_t> create(double_t x, double_t y, double_t z, uint32_t state_index_qw, uint32_t state_index_qx, uint32_t state_index_qy, uint32_t state_index_qz);
     
     // METHODS
-    transform::transform_t get_transform(const Eigen::VectorXd& state_vector) const override;
+    const transform::transform_t& get_transform(const Eigen::VectorXd& state_vector) override;
 
 private:
     // CONSTRUCTORS
@@ -38,8 +38,6 @@ private:
     ftdr_t(const ftdr_t&) = delete;
 
     // VARIABLES
-    /// \brief The attachment's transform.
-    mutable transform::transform_t m_transform;
     /// \brief The state vector index of the dynamic w component of the quaternion.
     uint32_t m_state_index_qw;
     /// \brief The state vector index of the dynamic x component of the quaternion.

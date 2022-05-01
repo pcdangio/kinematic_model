@@ -25,8 +25,8 @@ public:
     // METHODS
     /// \brief Gets the child-to-parent transform between the two attached objects.
     /// \param state_vector The current state vector to evaluate the transform with.
-    /// \returns The child-to-parent transform.
-    virtual transform::transform_t get_transform(const Eigen::VectorXd& state_vector) const = 0;
+    /// \returns A const reference to the child-to-parent transform.
+    virtual const transform::transform_t& get_transform(const Eigen::VectorXd& state_vector) = 0;
 
     // PROPERTIES
     /// \brief Gets the attachment's type.
@@ -38,6 +38,9 @@ protected:
     /// \brief Instantiates a new attachment.
     /// \param type The type of attachment to create.
     attachment_t(type_t type);
+
+    /// \brief The attachment's transform.
+    transform::transform_t m_transform;
 
 private:
     // VARIABLES

@@ -38,7 +38,7 @@ std::shared_ptr<dtfr_t> dtfr_t::create(uint32_t state_index_x, uint32_t state_in
 }
 
 // METHODS
-transform::transform_t dtfr_t::get_transform(const Eigen::VectorXd& state_vector) const
+const transform::transform_t& dtfr_t::get_transform(const Eigen::VectorXd& state_vector)
 {
     // Populate transform's translation from state vector.
     dtfr_t::m_transform.translation.x() = state_vector[dtfr_t::m_state_index_x];

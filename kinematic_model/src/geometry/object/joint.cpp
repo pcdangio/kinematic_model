@@ -35,7 +35,7 @@ void joint_t::set_axis_definition(double x, double y, double z)
     // Normalize axis.
     joint_t::m_axis_definition.normalize();
 }
-transform::transform_t joint_t::get_transform(const Eigen::VectorXd& state_vector) const
+const transform::transform_t& joint_t::get_transform(const Eigen::VectorXd& state_vector)
 {
     // Calculate transform from joint parent frame to child frame.
 

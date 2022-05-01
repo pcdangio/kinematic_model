@@ -38,7 +38,7 @@ public:
     static std::shared_ptr<dtfr_t> create(uint32_t state_index_x, uint32_t state_index_y, uint32_t state_index_z, double_t roll, double_t pitch, double_t yaw);
     
     // METHODS
-    transform::transform_t get_transform(const Eigen::VectorXd& state_vector) const override;
+    const transform::transform_t& get_transform(const Eigen::VectorXd& state_vector) override;
 
 private:
     // CONSTRUCTORS
@@ -47,8 +47,6 @@ private:
     dtfr_t(const dtfr_t&) = delete;
 
     // VARIABLES
-    /// \brief The attachment's transform.
-    mutable transform::transform_t m_transform;
     /// \brief The state vector index of the dynamic x component of the translation.
     uint32_t m_state_index_x;
     /// \brief The state vector index of the dynamic y component of the translation.

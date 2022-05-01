@@ -30,7 +30,7 @@ std::shared_ptr<ftdr_t> ftdr_t::create(double x, double y, double z, uint32_t st
 }
 
 // METHODS
-transform::transform_t ftdr_t::get_transform(const Eigen::VectorXd& state_vector) const
+const transform::transform_t& ftdr_t::get_transform(const Eigen::VectorXd& state_vector)
 {
     // Populate transform's rotation from state vector.
     ftdr_t::m_transform.rotation.w() = state_vector[ftdr_t::m_state_index_qw];

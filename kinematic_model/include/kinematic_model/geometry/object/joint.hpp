@@ -41,7 +41,7 @@ public:
     /// \note The unit vector definging the axis should have a magnitude of 1.
     /// \exception std::runtime_error if the joint is locked to prevent editing.
     void set_axis_definition(double x, double y, double z);
-    transform::transform_t get_transform(const Eigen::VectorXd& state_vector) const override;
+    const transform::transform_t& get_transform(const Eigen::VectorXd& state_vector) override;
 
     // PROPERTIES
     /// \brief Gets the joint's type.
@@ -62,8 +62,6 @@ private:
     const type_t m_joint_type;
     /// \brief The unit axis that the joint's degree of freedom operates on.
     Eigen::Vector3d m_axis_definition;
-    /// \brief The transform for the joint.
-    mutable transform::transform_t m_transform;
     /// \brief The index of the joint's state variable in the state vector.
     const uint32_t m_state_index;
 };
