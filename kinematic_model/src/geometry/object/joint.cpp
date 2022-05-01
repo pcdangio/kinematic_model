@@ -1,7 +1,5 @@
 #include <kinematic_model/geometry/object/joint.hpp>
 
-#include <ros/console.h>
-
 using namespace kinematic_model::geometry::object;
 
 // FACTORY
@@ -24,12 +22,11 @@ joint_t::joint_t(const std::string& name, type_t type, uint32_t state_index)
 }
 
 // METHODS
-bool joint_t::set_axis_definition(double x, double y, double z)
+void joint_t::set_axis_definition(double x, double y, double z)
 {
     if(joint_t::is_locked())
     {
-        ROS_ERROR_STREAM("failed to set axis for joint [" << joint_t::name() << "] (editing is locked)");
-        return false;
+        throw std::runtime_error("failed to set axis for joint [" + joint_t::name() + "] (editing is locked)");
     }
 
     // Store axis.
@@ -37,8 +34,6 @@ bool joint_t::set_axis_definition(double x, double y, double z)
 
     // Normalize axis.
     joint_t::m_axis_definition.normalize();
-
-    return false;
 }
 transform::transform_t joint_t::get_transform(const Eigen::VectorXd& state_vector) const
 {
@@ -49,24 +44,17 @@ transform::transform_t joint_t::get_transform(const Eigen::VectorXd& state_vecto
     {
         case joint_t::type_t::REVOLUTE:
         {
-            // Transform is a rotation about the defined axis.
-            double angle = state_vector[joint_t::m_state_index];
-            Eigen::Quaterniond rotation;
-            rotation = Eigen::AngleAxisd(angle, joint_t::m_axis_definition);
-
-            // Create and return transform using rotation.
-            return transform::transform_t(rotation);
+            // Populate transform's rotation.
+            joint_t::m_transform.rotation = Eigen::AngleAxisd(state_vector[joint_t::m_state_index], joint_t::m_axis_definition);
         }
         case joint_t::type_t::PRISMATIC:
         {
-            // Transform is a translation along the defined axis.
-            double distance = state_vector[joint_t::m_state_index];
-            Eigen::Vector3d translation = joint_t::m_axis_definition * distance;
-
-            // Create and return transform using translation.
-            return transform::transform_t(translation);
+            // Populate transform's translation.
+            joint_t::m_transform.translation = joint_t::m_axis_definition * state_vector[joint_t::m_state_index];
         }
     }
+
+    return joint_t::m_transform;
 }
 
 // PROPERTIES

@@ -38,9 +38,9 @@ public:
     /// \param x The x component of the axis's unit vector.
     /// \param y The y component of the axis's unit vector.
     /// \param z The z component of the axis's unit vector.
-    /// \returns TRUE if the axis was updated, otherwise FALSE if the joint is locked against editing.
     /// \note The unit vector definging the axis should have a magnitude of 1.
-    bool set_axis_definition(double x, double y, double z);
+    /// \exception std::runtime_error if the joint is locked to prevent editing.
+    void set_axis_definition(double x, double y, double z);
     transform::transform_t get_transform(const Eigen::VectorXd& state_vector) const override;
 
     // PROPERTIES
@@ -62,6 +62,8 @@ private:
     const type_t m_joint_type;
     /// \brief The unit axis that the joint's degree of freedom operates on.
     Eigen::Vector3d m_axis_definition;
+    /// \brief The transform for the joint.
+    mutable transform::transform_t m_transform;
     /// \brief The index of the joint's state variable in the state vector.
     const uint32_t m_state_index;
 };

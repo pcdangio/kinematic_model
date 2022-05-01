@@ -1,22 +1,19 @@
 #include <kinematic_model/geometry/design.hpp>
 
-#include <ros/console.h>
-
 using namespace kinematic_model::geometry;
 
 // ADDITION
-bool design_t::add_object(const std::shared_ptr<object::object_t>& object)
+void design_t::add_object(const std::shared_ptr<object::object_t>& object)
 {
     // Call base add_object() with empty parent/attachment.
     return design_t::add_object(object, nullptr, nullptr);
 }
-bool design_t::add_object(const std::shared_ptr<object::object_t>& object, const std::shared_ptr<object::object_t>& parent, const std::shared_ptr<attachment::attachment_t>& attachment)
+void design_t::add_object(const std::shared_ptr<object::object_t>& object, const std::shared_ptr<object::object_t>& parent, const std::shared_ptr<attachment::attachment_t>& attachment)
 {
     // Check that object exists.
     if(!object)
     {
-        ROS_ERROR("failed to add object to model design (object is nullptr)");
-        return false;
+        throw std::runtime_error("failed to add object to model design (object is nullptr)");
     }
 
     // Check that object with same name doesn't already exist.
@@ -24,8 +21,7 @@ bool design_t::add_object(const std::shared_ptr<object::object_t>& object, const
     {
         if(instruction->object->name() == object->name())
         {
-            ROS_ERROR_STREAM("failed to add object [" << object->name() << "] to model design (object with same name already exists)");
-            return false;
+            throw std::runtime_error("failed to add object [" + object->name() + "] to model design (object with same name already exists)");
         }
     }
 
@@ -45,21 +41,18 @@ bool design_t::add_object(const std::shared_ptr<object::object_t>& object, const
         // If this point reached and parent_exists is still false, parent does not exist.
         if(!parent_exists)
         {
-            ROS_ERROR_STREAM("failed to add object [" << object->name() << "] to model design (parent does not exist)");
-            return false;
+            throw std::runtime_error("failed to add object [" + object->name() + "] to model design (parent does not exist)");
         }
     }
 
     // If a parent is given, ensure that an attachment is given.
     if(parent && !attachment)
     {
-        ROS_ERROR_STREAM("failed to add object [" << object->name() << "] to model design (given parent with nullptr attachment)");
-        return false;
+        throw std::runtime_error("failed to add object [" + object->name() + "] to model design (given parent with nullptr attachment)");
     }
     else if(!parent && attachment)
     {
-        ROS_ERROR_STREAM("failed to add object [" << object->name() << "] to model design (cannot use attachment on nullptr parent)");
-        return false;
+        throw std::runtime_error("failed to add object [" + object->name() + "] to model design (cannot use attachment on nullptr parent)");
     }
 
     // Add object to instructions.
@@ -67,8 +60,6 @@ bool design_t::add_object(const std::shared_ptr<object::object_t>& object, const
 
     // Lock the object so it can no longer be edited.
     object->lock();
-
-    return true;
 }
 
 // ACCESS

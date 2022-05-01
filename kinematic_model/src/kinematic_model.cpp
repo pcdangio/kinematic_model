@@ -73,9 +73,6 @@ bool kinematic_model_t::get_transform(const std::string& source_frame, const std
 }
 bool kinematic_model_t::get_transform(const std::string& source_frame, const std::string& target_frame, transform::transform_t& transform)
 {
-    // Create an output transform (defaults to identity).
-    transform::transform_t transform;
-
     // Create flag for tracking success of transform retrieval.
     bool success = false;
 

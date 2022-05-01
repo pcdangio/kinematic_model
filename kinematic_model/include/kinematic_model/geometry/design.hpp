@@ -26,13 +26,14 @@ public:
     // ADDITION
     /// \brief Adds an object to the design without a parent.
     /// \param object The object to add.
-    /// \returns TRUE if the object was added successfully, otherwise FALSE.
-    bool add_object(const std::shared_ptr<object::object_t>& object);
+    /// \exception std::runtime_error if the design fails to add the object.
+    void add_object(const std::shared_ptr<object::object_t>& object);
     /// \brief Adds an object to the design by attaching it to a parent.
     /// \param object The object to add.
     /// \param parent The parent to attach the object to.
     /// \param attachment The attachment from the parent to the object.
-    bool add_object(const std::shared_ptr<object::object_t>& object, const std::shared_ptr<object::object_t>& parent, const std::shared_ptr<attachment::attachment_t>& attachment);
+    /// \exception std::runtime_error if the design fails to add the object.
+    void add_object(const std::shared_ptr<object::object_t>& object, const std::shared_ptr<object::object_t>& parent, const std::shared_ptr<attachment::attachment_t>& attachment);
     
     // INSTRUCTIONS
     /// \brief Represents a single line instruction in the design.
