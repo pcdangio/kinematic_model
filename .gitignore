@@ -3,3 +3,6 @@
 
 # Ignore build files.
 build/
+
+# Ignore HTML documentation.
+doc/html/
