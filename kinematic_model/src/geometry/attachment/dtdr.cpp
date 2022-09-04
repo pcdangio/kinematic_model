@@ -43,6 +43,9 @@ const transform::transform_t& dtdr_t::get_transform(const Eigen::VectorXd& state
     dtdr_t::m_transform.rotation.y() = state_vector[dtdr_t::m_state_index_qy];
     dtdr_t::m_transform.rotation.z() = state_vector[dtdr_t::m_state_index_qz];
 
+    // Normalize the rotation.
+    dtdr_t::m_transform.rotation.normalize();
+
     // Return transform.
     return dtdr_t::m_transform;
 }

@@ -38,6 +38,9 @@ const transform::transform_t& ftdr_t::get_transform(const Eigen::VectorXd& state
     ftdr_t::m_transform.rotation.y() = state_vector[ftdr_t::m_state_index_qy];
     ftdr_t::m_transform.rotation.z() = state_vector[ftdr_t::m_state_index_qz];
 
+    // Normalize the rotation.
+    ftdr_t::m_transform.rotation.normalize();
+
     // Return transform.
     return ftdr_t::m_transform;
 }
