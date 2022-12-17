@@ -21,18 +21,52 @@ void graph_t::build(const design_t& model_design)
     // Iterate through design to populate the graph.
     for(auto instruction = instructions.cbegin(); instruction != instructions.cend(); ++instruction)
     {
-        // Create new vertex for object.
-        vertex_t* vertex = new vertex_t;
-        vertex->id = graph_t::m_vertices.size();
-
-        // Add object's vertex to vertex map.
+        // Get name for this object's vertex.
         std::string object_name = instruction->object->name();
-        // If object is a joint, append _parent to it's primary vertex.
+        // If object is a joint, append _parent to it's name.
         if(instruction->object->object_type() == object::object_t::type_t::JOINT)
         {
             object_name += "_parent";
         }
-        graph_t::m_vertices.emplace(object_name, vertex);
+
+        // Get the vertex if it exists, otherwise create it and add to map.
+        vertex_t* vertex;
+        auto vertex_entry = graph_t::m_vertices.find(object_name);
+        if(vertex_entry == graph_t::m_vertices.end())
+        {
+            // Vertex does not yet exist.
+            // Create vertex.
+            vertex = new vertex_t;
+            // Assign vertex's ID.
+            vertex->id = graph_t::m_vertices.size();
+            
+            // Add vertex pointer to map.
+            graph_t::m_vertices.emplace(object_name, vertex);
+
+            // If object is a joint, add a second vertex for the joint_child frame.
+            if(instruction->object->object_type() == object::object_t::type_t::JOINT)
+            {
+                // Create vertex for joint_child frame.
+                vertex_t* vertex_jc = new vertex_t;
+                vertex_jc->id = graph_t::m_vertices.size();
+                
+                // Add joint_child vertex to vertex map.
+                graph_t::m_vertices.emplace(instruction->object->name() + "_child", vertex_jc);
+
+                // Connect joint_child with the joint_parent frame.
+                // Get joint as attachment object.
+                auto joint_attachment = std::dynamic_pointer_cast<attachment::attachment_t>(instruction->object);
+                // Attach parent to child and child to parent.
+                vertex->neighbors.emplace_back(vertex_jc, joint_attachment, connection_t::direction_t::PARENT_CHILD);
+                vertex_jc->neighbors.emplace_back(vertex, joint_attachment, connection_t::direction_t::CHILD_PARENT);
+            }
+        }
+        else
+        {
+            // Vertex already exists.
+            // Copy the existing vertex pointer address.
+            vertex = vertex_entry->second;
+        }
 
         // Check if object has a parent.
         if(instruction->parent)
@@ -49,24 +83,6 @@ void graph_t::build(const design_t& model_design)
             auto parent_vertex = graph_t::m_vertices.at(parent_name);
             parent_vertex->neighbors.emplace_back(vertex, instruction->attachment, connection_t::direction_t::PARENT_CHILD);
             vertex->neighbors.emplace_back(parent_vertex, instruction->attachment, connection_t::direction_t::CHILD_PARENT);
-        }
-
-        // If object is a joint, add a second vertex for the joint_child frame.
-        if(instruction->object->object_type() == object::object_t::type_t::JOINT)
-        {
-            // Create vertex for joint_child frame.
-            vertex_t* vertex_jc = new vertex_t;
-            vertex_jc->id = graph_t::m_vertices.size();
-            
-            // Add joint_child vertex to vertex map.
-            graph_t::m_vertices.emplace(instruction->object->name() + "_child", vertex_jc);
-
-            // Connect joint_child with the joint_parent frame.
-            // Get joint as attachment object.
-            auto joint_attachment = std::dynamic_pointer_cast<attachment::attachment_t>(instruction->object);
-            // Attach parent to child and child to parent.
-            vertex->neighbors.emplace_back(vertex_jc, joint_attachment, connection_t::direction_t::PARENT_CHILD);
-            vertex_jc->neighbors.emplace_back(vertex, joint_attachment, connection_t::direction_t::CHILD_PARENT);
         }
     }
 }

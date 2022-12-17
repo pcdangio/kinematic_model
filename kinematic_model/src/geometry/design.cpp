@@ -16,15 +16,6 @@ void design_t::add_object(const std::shared_ptr<object::object_t>& object, const
         throw std::runtime_error("failed to add object to model design (object is nullptr)");
     }
 
-    // Check that object with same name doesn't already exist.
-    for(auto instruction = design_t::m_instructions.cbegin(); instruction != design_t::m_instructions.cend(); ++instruction)
-    {
-        if(instruction->object->name() == object->name())
-        {
-            throw std::runtime_error("failed to add object [" + object->name() + "] to model design (object with same name already exists)");
-        }
-    }
-
     // If a parent is given, ensure that it exists in the design.
     if(parent)
     {
